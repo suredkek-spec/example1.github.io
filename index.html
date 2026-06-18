@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профивделе — строительство под ключ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: #ff0066; border-radius: 3px; }
+
+    /* HEADER */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 18px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(10,10,15,0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,0,102,0.12);
+      transition: background 0.4s;
+    }
+    header.scrolled { background: rgba(10,10,15,0.93); }
+    .logo {
+      font-size: 24px; font-weight: 900;
+      background: linear-gradient(135deg, #ff0066, #ff66b3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .logo span { font-weight: 300; -webkit-text-fill-color: rgba(255,255,255,0.3); }
+    nav { display: flex; align-items: center; gap: 32px; }
+    .mag-link {
+      display: inline-block;
+      color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; font-weight: 500;
+      letter-spacing: 0.3px; position: relative; transition: transform 0.15s;
+      will-change: transform;
+    }
+    .mag-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: #ff0066; transition: width 0.3s;
+    }
+    .mag-link:hover { color: #fff; }
+    .mag-link:hover::after { width: 100%; }
+    .phone-link {
+      padding: 10px 24px; border: 1.5px solid #ff0066; border-radius: 50px;
+      color: #ff0066 !important; font-weight: 600; transition: all 0.3s;
+    }
+    .phone-link::after { display: none !important; }
+    .phone-link:hover { background: #ff0066; color: #fff !important; }
+
+    /* SECTIONS common */
+    section {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 100px 48px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .section-inner { max-width: 1200px; width: 100%; z-index: 2; position: relative; }
+    .section-label {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 3px; color: #ff66b3;
+      margin-bottom: 12px; font-weight: 600;
+    }
+    .section-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; margin-bottom: 12px; }
+    .section-desc { color: rgba(255,255,255,0.45); font-size: 16px; line-height: 1.7; max-width: 500px; margin-bottom: 48px; }
+
+    /* ===== HERO ===== */
+    #hero { background: radial-gradient(ellipse at 20% 50%, #1a0a1a 0%, #0a0a0f 70%); }
+    #hero::before {
+      content: ''; position: absolute; top: -30%; right: -10%; width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,0,102,0.12) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .hero-badge {
+      display: inline-block; padding: 6px 18px; border-radius: 50px;
+      background: rgba(255,0,102,0.12); border: 1px solid rgba(255,0,102,0.25);
+      font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #ff66b3; margin-bottom: 24px;
+    }
+    .hero-title { font-size: clamp(40px, 5vw, 72px); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+    .hero-title .highlight {
+      background: linear-gradient(135deg, #ff0066, #ff66b3);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub { font-size: 18px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 36px; max-width: 500px; }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block; padding: 16px 40px; border-radius: 50px;
+      background: linear-gradient(135deg, #ff0066, #cc0052);
+      color: #fff; text-decoration: none; font-weight: 600; font-size: 15px;
+      transition: transform 0.3s, box-shadow 0.3s; border: none; cursor: pointer;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,0,102,0.35); }
+    .btn-outline {
+      display: inline-block; padding: 16px 40px; border-radius: 50px;
+      border: 1.5px solid rgba(255,255,255,0.2); color: #fff; text-decoration: none;
+      font-weight: 600; font-size: 15px; transition: all 0.3s; background: transparent;
+    }
+    .btn-outline:hover { border-color: #ff0066; background: rgba(255,0,102,0.08); }
+    .hero-stats {
+      display: flex; gap: 40px; margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .hero-stat h3 { font-size: 32px; font-weight: 900; color: #ff0066; }
+    .hero-stat p { font-size: 13px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    .hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+    .hero-visual-inner { width: 100%; max-width: 480px; aspect-ratio: 1; position: relative; }
+    .gradient-sphere {
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at 30% 40%, rgba(255,0,102,0.15), rgba(255,51,153,0.05), transparent 70%);
+      border-radius: 50%; position: relative;
+    }
+    .gradient-sphere::before {
+      content: ''; position: absolute; inset: -30%;
+      background: conic-gradient(from 0deg, transparent, rgba(255,0,102,0.08), transparent, rgba(255,51,153,0.08), transparent);
+      border-radius: 50%; animation: spin 20s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .floating-card {
+      position: absolute;
+      background: rgba(255,255,255,0.04); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 16px 20px;
+      display: flex; align-items: center; gap: 14px;
+      animation: float 6s ease-in-out infinite;
+    }
+    .floating-card:nth-child(2) { top: 8%; right: 5%; animation-delay: 0s; }
+    .floating-card:nth-child(3) { bottom: 25%; left: 0; animation-delay: 2s; }
+    .floating-card:nth-child(4) { bottom: 5%; right: 12%; animation-delay: 4s; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .floating-card .ficon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(255,0,102,0.12);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .floating-card .ficon svg { width: 26px; height: 26px; stroke: #ff66b3; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .floating-card .finfo strong { font-size: 16px; font-weight: 700; display: block; color: #fff; }
+    .floating-card .finfo p { font-size: 13px; color: rgba(255,255,255,0.45); white-space: nowrap; }
+
+    /* ===== CALCULATOR ===== */
+    #calculator { background: radial-gradient(ellipse at 50% 30%, #120a12 0%, #0a0a0f 70%); }
+    .calc-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .calc-info h3 { font-size: clamp(28px, 3vw, 44px); font-weight: 900; margin-bottom: 16px; }
+    .calc-info p { color: rgba(255,255,255,0.45); line-height: 1.7; margin-bottom: 24px; }
+    .calc-features { display: flex; flex-direction: column; gap: 10px; }
+    .calc-feature { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.55); font-size: 14px; }
+    .calc-feature .check { color: #ff0066; font-weight: 900; }
+
+    .calc-form {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px; padding: 40px;
+    }
+    .calc-total-hero { text-align: center; padding: 16px 0 24px; }
+    .calc-total-hero .label { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.3); font-weight: 600; }
+    .calc-total-hero .amount {
+      font-size: clamp(40px, 5vw, 64px); font-weight: 900;
+      background: linear-gradient(135deg, #ff0066, #ff80bf);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+    .calc-total-hero .amount .curr { font-size: clamp(20px, 2.5vw, 32px); -webkit-text-fill-color: rgba(255,255,255,0.2); }
+
+    .slider-wrap { padding: 8px 0 16px; }
+    .slider-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+    .slider-header .sl-label { font-size: 13px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    .slider-header .sl-value { font-size: 24px; font-weight: 700; color: #fff; }
+    .slider-header .sl-value small { font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.3); }
+
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px; border-radius: 3px;
+      background: rgba(255,255,255,0.08); outline: none; cursor: grab;
+    }
+    input[type="range"]:active { cursor: grabbing; }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px; border-radius: 3px;
+      background: linear-gradient(90deg, #ff0066 var(--fill, 0%), rgba(255,255,255,0.08) var(--fill, 0%));
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff3399, #ff0066);
+      box-shadow: 0 0 20px rgba(255,0,102,0.3);
+      margin-top: -9px; border: 2px solid rgba(255,255,255,0.15);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover,
+    input[type="range"]:active::-webkit-slider-thumb {
+      transform: scale(1.4);
+      box-shadow: 0 0 40px rgba(255,0,102,0.5), 0 0 80px rgba(255,0,102,0.2);
+    }
+    input[type="range"]::-moz-range-track { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); border: none; }
+    input[type="range"]::-moz-range-thumb {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff3399, #ff0066);
+      border: 2px solid rgba(255,255,255,0.15); cursor: grab;
+    }
+    input[type="range"]::-moz-range-progress { height: 6px; border-radius: 3px; background: linear-gradient(90deg, #ff0066, #ff3399); }
+
+    .calc-field { margin-top: 20px; }
+    .calc-field label {
+      display: block; font-size: 13px; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;
+    }
+    .calc-field input {
+      width: 100%; padding: 16px 20px; border-radius: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; font-size: 16px; font-family: inherit;
+      transition: border-color 0.3s; outline: none;
+    }
+    .calc-field input:focus { border-color: #ff0066; }
+    .calc-field input::placeholder { color: rgba(255,255,255,0.2); }
+
+    .btn-submit {
+      width: 100%; margin-top: 24px; padding: 18px; border-radius: 12px;
+      background: linear-gradient(135deg, #ff0066, #cc0052);
+      color: #fff; font-size: 16px; font-weight: 700; border: none; cursor: pointer;
+      transition: all 0.3s; font-family: inherit; position: relative; overflow: hidden;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,0,102,0.3); }
+
+    .calc-success { display: none; text-align: center; padding: 40px; }
+    .calc-success.show { display: block; }
+    .calc-success .icon { font-size: 48px; margin-bottom: 16px; }
+    .calc-success h3 { font-size: 24px; margin-bottom: 8px; }
+    .calc-success p { color: rgba(255,255,255,0.5); }
+
+    /* ===== SERVICES ===== */
+    #services { background: radial-gradient(ellipse at 80% 50%, #0d0a12 0%, #0a0a0f 70%); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .service-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px; padding: 32px 28px;
+      transition: all 0.4s; cursor: default; position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, #ff0066, transparent);
+      transform: translateX(-100%); transition: transform 0.6s;
+    }
+    .service-card:hover::before { transform: translateX(100%); }
+    .service-card:hover { background: rgba(255,0,102,0.06); border-color: rgba(255,0,102,0.2); transform: translateY(-6px); }
+    .service-icon {
+      width: 60px; height: 60px; border-radius: 16px;
+      background: rgba(255,0,102,0.12); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .service-icon svg { width: 30px; height: 30px; stroke: #ff66b3; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .service-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+    .service-card p { color: rgba(255,255,255,0.45); font-size: 14px; line-height: 1.6; }
+    .service-number { position: absolute; bottom: 16px; right: 20px; font-size: 48px; font-weight: 900; color: rgba(255,0,102,0.06); line-height: 1; }
+
+    /* ===== PORTFOLIO VERTICAL DO/POSLE CARDS ===== */
+    #portfolio {
+      background: radial-gradient(ellipse at 30% 80%, #0d0a12 0%, #0a0a0f 70%);
+      padding-bottom: 80px;
+    }
+    .portfolio-header { margin-bottom: 32px; }
+
+    .swiper-portfolio-wrap { position: relative; padding: 0 56px; }
+    .swiper { width: 100%; padding: 20px 0 60px; overflow: visible; }
+
+    .swiper-slide {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .swiper-slide:hover {
+      transform: translateY(-6px);
+    }
+
+    .slide-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 2/3;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transition: box-shadow 0.4s;
+    }
+    .swiper-slide:hover .slide-card {
+      box-shadow: 0 12px 40px rgba(255,0,102,0.12), 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .slide-half {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide-half img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block;
+    }
+    .slide-half.slide-before img {
+      filter: grayscale(1) brightness(0.55) contrast(0.85);
+    }
+
+    .badge {
+      position: absolute;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .badge-before {
+      bottom: 10px; left: 12px;
+      background: rgba(0,0,0,0.55);
+      color: rgba(255,255,255,0.5);
+    }
+    .badge-after {
+      top: 10px; right: 12px;
+      background: rgba(255,0,102,0.2);
+      border: 1px solid rgba(255,0,102,0.15);
+      color: #ff66b3;
+    }
+
+    .slide-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 40px 20px 18px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      pointer-events: none;
+      z-index: 3;
+    }
+    .slide-caption h3 { font-size: 16px; font-weight: 700; color: #fff; }
+    .slide-caption p { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+    /* ARROWS */
+    .swiper-portfolio-wrap .swiper-button-next,
+    .swiper-portfolio-wrap .swiper-button-prev {
+      color: #ff0066;
+      background: rgba(10,10,15,0.5);
+      backdrop-filter: blur(10px);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,0,102,0.15);
+      transition: opacity 0.3s, background 0.3s;
+      top: 38%;
+      opacity: 0;
+      z-index: 20;
+    }
+    .swiper-portfolio-wrap:hover .swiper-button-next,
+    .swiper-portfolio-wrap:hover .swiper-button-prev { opacity: 1; }
+    .swiper-portfolio-wrap .swiper-button-next { right: 4px; }
+    .swiper-portfolio-wrap .swiper-button-prev { left: 4px; }
+    .swiper-portfolio-wrap .swiper-button-next:hover,
+    .swiper-portfolio-wrap .swiper-button-prev:hover {
+      background: #ff0066;
+      border-color: #ff0066;
+      color: #fff;
+    }
+    .swiper-portfolio-wrap .swiper-button-next::after,
+    .swiper-portfolio-wrap .swiper-button-prev::after { font-size: 16px; font-weight: 700; }
+
+    /* PAGINATION */
+    .swiper-portfolio-wrap .swiper-pagination {
+      bottom: 4px !important;
+    }
+    .swiper-portfolio-wrap .swiper-pagination-bullet {
+      background: rgba(255,255,255,0.12);
+      opacity: 1;
+      width: 8px; height: 8px;
+      border-radius: 4px;
+      margin: 0 5px !important;
+      transition: width 0.4s cubic-bezier(0.34,1.56,0.64,1), background 0.3s;
+    }
+    .swiper-portfolio-wrap .swiper-pagination-bullet-active {
+      background: #ff0066;
+      width: 28px;
+      border-radius: 4px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      position: relative;
+      text-align: center;
+      padding: 48px 48px 32px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      background: #08080d;
+      overflow: hidden;
+    }
+    footer .footer-glow {
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,0,102,0.12), transparent 60%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+      opacity: 0;
+      will-change: transform;
+    }
+    footer:hover .footer-glow { opacity: 1; }
+    .footer-inner { position: relative; z-index: 2; }
+    .footer-links {
+      display: flex; justify-content: center; gap: 32px; margin-bottom: 20px;
+    }
+    .footer-links a, .footer-links span {
+      display: inline-block;
+      color: rgba(255,255,255,0.25); text-decoration: none; font-size: 13px;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover, .footer-links span:hover { color: #ff0066; }
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(255,255,255,0.15);
+      transition: color 0.3s;
+    }
+
+    @media (max-width: 900px) {
+      header { padding: 14px 20px; position: fixed; z-index: 9999; }
+      nav { gap: 14px; }
+      nav a { font-size: 11px; }
+      .phone-link { padding: 6px 14px; font-size: 11px; }
+      section { min-height: auto; padding: 80px 20px 40px; }
+      #hero { min-height: 100vh; min-height: 100dvh; }
+      .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+      .hero-title { font-size: clamp(28px, 6vw, 40px); }
+      .hero-sub { font-size: 15px; margin-bottom: 24px; max-width: 100%; }
+      .hero-stats { gap: 20px; flex-wrap: wrap; margin-top: 32px; padding-top: 24px; }
+      .hero-stat h3 { font-size: 26px; }
+      .hero-stat p { font-size: 11px; }
+      .hero-visual {
+        display: block;
+        position: sticky;
+        top: 70px;
+        z-index: 10;
+        height: 220px;
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+      .hero-visual-inner { transform: scale(0.55); transform-origin: center center; }
+      .calc-wrapper { grid-template-columns: 1fr; gap: 32px; }
+      .calc-form { padding: 24px; }
+      footer { padding: 32px 20px 24px; }
+      .footer-links { gap: 16px; flex-wrap: wrap; }
+      .swiper-portfolio-wrap .swiper-button-next,
+      .swiper-portfolio-wrap .swiper-button-prev { display: none; }
+      .swiper-portfolio-wrap { padding: 0; }
+    }
+    @media (max-width: 600px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 28px; }
+      .hero-sub { font-size: 14px; }
+      .hero-buttons { flex-direction: column; }
+      .btn-primary, .btn-outline { width: 100%; text-align: center; padding: 14px 24px; font-size: 14px; }
+      .hero-stats { gap: 16px; }
+      .hero-stat h3 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="header">
+  <div class="logo">Профи<span>вделе</span></div>
+  <nav>
+    <a href="#hero" class="mag-link">О нас</a>
+    <a href="#portfolio" class="mag-link">Портфолио</a>
+    <a href="#calculator" class="mag-link">Стоимость</a>
+    <a href="tel:89097880000" class="mag-link phone-link">8 (909) 788-00-00</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="section-inner">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge">Строительная компания</div>
+        <h1 class="hero-title">
+          Почему <span class="highlight">выбирают</span> нас
+        </h1>
+        <p class="hero-sub">
+          Делаем всё быстро и качественно. Полный цикл строительных работ — от фундамента до чистовой отделки.
+        </p>
+        <div class="hero-buttons">
+          <a href="#calculator" class="btn-primary">Рассчитать стоимость</a>
+          <a href="#portfolio" class="btn-outline">Наши работы</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><h3>12+</h3><p>Лет опыта</p></div>
+          <div class="hero-stat"><h3>150+</h3><p>Проектов</p></div>
+          <div class="hero-stat"><h3>98%</h3><p>Довольных клиентов</p></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-visual-inner">
+          <div class="gradient-sphere"></div>
+          <div class="floating-card">
+            <div class="ficon">
+              <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+            </div>
+            <div class="finfo"><strong>Отделка домов</strong><p>под ключ</p></div>
+          </div>
+          <div class="floating-card">
+            <div class="ficon">
+              <svg viewBox="0 0 24 24"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M4 7V4a2 2 0 0 1 2-2h2"/><path d="M4 17v3a2 2 0 0 0 2 2h2"/><path d="M18 22h2a2 2 0 0 0 2-2v-2"/><path d="M7 12h.01"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 16h.01"/><path d="M17 16h.01"/><path d="M12 16h.01"/></svg>
+            </div>
+            <div class="finfo"><strong>Ремонт квартир</strong><p>без посредников</p></div>
+          </div>
+          <div class="floating-card">
+            <div class="ficon">
+              <svg viewBox="0 0 24 24"><path d="M2 20h20"/><path d="M4 20V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12"/><path d="M8 20V6"/><path d="M16 20V6"/><path d="M12 20V6"/></svg>
+            </div>
+            <div class="finfo"><strong>Фундамент</strong><p>под ключ</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calculator">
+  <div class="section-inner">
+    <div class="calc-wrapper">
+      <div class="calc-info">
+        <div class="section-label">Калькулятор</div>
+        <h3 class="section-title">Рассчитайте стоимость</h3>
+        <p class="section-desc">Передвиньте ползунок, укажите имя — и мы пришлём точную смету в течение часа.</p>
+        <div class="calc-features">
+          <div class="calc-feature"><span class="check">✦</span> Базовая стоимость 10 000 ₽ за м²</div>
+          <div class="calc-feature"><span class="check">✦</span> Бесплатный выезд замерщика</div>
+          <div class="calc-feature"><span class="check">✦</span> Смета в день обращения</div>
+        </div>
+      </div>
+      <div class="calc-form" id="calcForm">
+        <div class="calc-total-hero">
+          <div class="label">Предварительная стоимость</div>
+          <div class="amount" id="totalPrice">500 000 <span class="curr">₽</span></div>
+        </div>
+        <div class="slider-wrap">
+          <div class="slider-header">
+            <span class="sl-label">Площадь</span>
+            <span class="sl-value" id="areaLabel">50 <small>м²</small></span>
+          </div>
+          <input type="range" id="areaSlider" min="10" max="500" value="50" step="1">
+        </div>
+
+        <div class="calc-field">
+          <label for="clientWant">Что вы хотите</label>
+          <input type="text" id="clientWant" placeholder="Отделка, ремонт, фундамент...">
+        </div>
+
+        <div class="calc-field">
+          <label for="clientName">Как к вам обращаться</label>
+          <input type="text" id="clientName" placeholder="Ваше имя">
+        </div>
+
+        <div class="calc-field">
+          <label for="clientPhone">Номер телефона</label>
+          <input type="tel" id="clientPhone" placeholder="+7 (___) ___-__-__">
+        </div>
+
+        <button class="btn-submit" id="submitBtn">Отправьте заявку</button>
+
+        <div class="calc-success" id="calcSuccess">
+          <div class="icon">✓</div>
+          <h3>Заявка отправлена!</h3>
+          <p>Мы свяжемся с вами в ближайшее время</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div class="section-label">Наши услуги</div>
+    <h2 class="section-title">Что мы предлагаем</h2>
+    <p class="section-desc">Полный спектр строительных услуг под ключ. Работаем без посредников, гарантируем качество.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+        </div>
+        <h3>Отделка домов под ключ</h3>
+        <p>Полный цикл отделочных работ — от черновой до чистовой отделки вашего дома.</p>
+        <div class="service-number">01</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M4 7V4a2 2 0 0 1 2-2h2"/><path d="M4 17v3a2 2 0 0 0 2 2h2"/><path d="M18 22h2a2 2 0 0 0 2-2v-2"/><path d="M7 12h.01"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 16h.01"/><path d="M17 16h.01"/><path d="M12 16h.01"/></svg>
+        </div>
+        <h3>Ремонт квартир под ключ</h3>
+        <p>Комплексный ремонт квартир без посредников. Дизайн-проект, материалы, работа — всё включено.</p>
+        <div class="service-number">02</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M2 20h20"/><path d="M4 20V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12"/><path d="M8 20V6"/><path d="M16 20V6"/><path d="M12 20V6"/></svg>
+        </div>
+        <h3>Фундамент под ключ</h3>
+        <p>Профессиональное устройство фундаментов любых типов: ленточный, плитный, свайный.</p>
+        <div class="service-number">03</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-6 6c0 3.6 6 10 6 10s6-6.4 6-10a6 6 0 0 0-6-6z"/><circle cx="12" cy="9" r="2"/></svg>
+        </div>
+        <h3>Теплый пол под ключ</h3>
+        <p>Монтаж водяных и электрических тёплых полов с гарантией и последующим обслуживанием.</p>
+        <div class="service-number">04</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO VERTICAL CARDS -->
+<section id="portfolio">
+  <div class="section-inner">
+    <div class="portfolio-header">
+      <div class="section-label">Портфолио</div>
+      <h2 class="section-title">Наши работы</h2>
+      <p class="section-desc">Листайте проекты — каждый объект выполнен с вниманием к деталям.</p>
+    </div>
+
+    <div class="swiper-portfolio-wrap">
+      <div class="swiper" id="portfolioSwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-half slide-before">
+                <img src="img/photo1.png" alt="Коттедж до">
+                <span class="badge badge-before">ДО</span>
+              </div>
+              <div class="slide-half slide-after">
+                <img src="img/photo1.png" alt="Коттедж после">
+                <span class="badge badge-after">ПОСЛЕ</span>
+              </div>
+            </div>
+            <div class="slide-caption"><h3>Современный коттедж</h3><p>Отделка дома, 220 м² • 45 дней</p></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-half slide-before">
+                <img src="img/photo2.png" alt="Квартира до">
+                <span class="badge badge-before">ДО</span>
+              </div>
+              <div class="slide-half slide-after">
+                <img src="img/photo2.png" alt="Квартира после">
+                <span class="badge badge-after">ПОСЛЕ</span>
+              </div>
+            </div>
+            <div class="slide-caption"><h3>Дизайнерская квартира</h3><p>Ремонт под ключ, 85 м² • 30 дней</p></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-half slide-before">
+                <img src="img/photo3.png" alt="Фундамент до">
+                <span class="badge badge-before">ДО</span>
+              </div>
+              <div class="slide-half slide-after">
+                <img src="img/photo3.png" alt="Фундамент после">
+                <span class="badge badge-after">ПОСЛЕ</span>
+              </div>
+            </div>
+            <div class="slide-caption"><h3>Монолитный фундамент</h3><p>150 м² • 60 дней</p></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-half slide-before">
+                <img src="img/photo4.jpg" alt="Тёплый пол до">
+                <span class="badge badge-before">ДО</span>
+              </div>
+              <div class="slide-half slide-after">
+                <img src="img/photo4.jpg" alt="Тёплый пол после">
+                <span class="badge badge-after">ПОСЛЕ</span>
+              </div>
+            </div>
+            <div class="slide-caption"><h3>Тёплый пол</h3><p>Водяной контур, 120 м² • 14 дней</p></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-half slide-before">
+                <img src="img/photo7.jpg" alt="Таунхаус до">
+                <span class="badge badge-before">ДО</span>
+              </div>
+              <div class="slide-half slide-after">
+                <img src="img/photo7.jpg" alt="Таунхаус после">
+                <span class="badge badge-after">ПОСЛЕ</span>
+              </div>
+            </div>
+            <div class="slide-caption"><h3>Отделка таунхауса</h3><p>3 этажа, 180 м² • 60 дней</p></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-half slide-before">
+                <img src="img/photo8.jpg" alt="Студия до">
+                <span class="badge badge-before">ДО</span>
+              </div>
+              <div class="slide-half slide-after">
+                <img src="img/photo8.jpg" alt="Студия после">
+                <span class="badge badge-after">ПОСЛЕ</span>
+              </div>
+            </div>
+            <div class="slide-caption"><h3>Квартира-студия</h3><p>Дизайн + ремонт, 38 м² • 20 дней</p></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-img">
+                <img src="img/photo9.jpg" alt="Загородный дом">
+              </div>
+              <div class="slide-caption"><h3>Загородный дом</h3><p>Отделка фасада, 200 м² • 50 дней</p></div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-img">
+                <img src="img/photo10.png" alt="Интерьер гостиной">
+              </div>
+              <div class="slide-caption"><h3>Интерьер гостиной</h3><p>Дизайн-проект + отделка, 45 м² • 25 дней</p></div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-img">
+                <img src="img/photo11.png" alt="Ванная комната">
+              </div>
+              <div class="slide-caption"><h3>Ванная комната</h3><p>Ремонт под ключ, 12 м² • 18 дней</p></div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-img">
+                <img src="img/photo12.jpg" alt="Кухня-гостиная">
+              </div>
+              <div class="slide-caption"><h3>Кухня-гостиная</h3><p>Современный интерьер, 35 м² • 22 дня</p></div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="slide-card">
+              <div class="slide-img">
+                <img src="img/photo13.png" alt="Отделка коттеджа">
+              </div>
+              <div class="slide-caption"><h3>Отделка коттеджа</h3><p>Под ключ, 250 м² • 70 дней</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-glow" id="footerGlow"></div>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#hero" class="mag-link">О нас</a>
+      <a href="#portfolio" class="mag-link">Портфолио</a>
+      <a href="#calculator" class="mag-link">Стоимость</a>
+      <a href="tel:89097880000" class="mag-link">8 (909) 788-00-00</a>
+      <span class="mag-link">Политика конфиденциальности</span>
+    </div>
+    <div class="footer-copy">© 2026 Профивделе — строим качественно и в срок</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ───── HEADER SCROLL ─────
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 50));
+
+  // ───── MAGNETIC LINKS ─────
+  document.querySelectorAll('.mag-link').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      const d = Math.sqrt(x * x + y * y);
+      if (d < 100) {
+        const s = Math.max(0, 1 - d / 100);
+        el.style.transform = `translate(${x * s * 0.25}px, ${y * s * 0.25}px)`;
+      }
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = 'translate(0,0)'; });
+  });
+
+  // ───── SCROLL REVEAL (IntersectionObserver fallback + GSAP enhancement) ─────
+  const animatedSections = [];
+
+  document.querySelectorAll('.section-label, .section-title, .section-desc, .service-card, .calc-features, .calc-form, .portfolio-header > *').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    animatedSections.push(el);
+  });
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const delay = Array.from(el.parentNode.children).indexOf(el) * 0.08;
+        setTimeout(() => {
+          el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }, delay * 1000);
+        revealObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  animatedSections.forEach(el => revealObserver.observe(el));
+
+  // ───── SLIDER CALCULATOR ─────
+  const slider = document.getElementById('areaSlider');
+  const areaLabel = document.getElementById('areaLabel');
+  const totalPrice = document.getElementById('totalPrice');
+  const clientWant = document.getElementById('clientWant');
+  const clientName = document.getElementById('clientName');
+  const clientPhone = document.getElementById('clientPhone');
+  const submitBtn = document.getElementById('submitBtn');
+  const calcSuccess = document.getElementById('calcSuccess');
+  const calcForm = document.getElementById('calcForm');
+  const PRICE = 10000;
+  let curArea = 50, curTotal = 500000;
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function animateNum(from, to, el, isPrice) {
+    const dur = 250;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const v = Math.round(from + (to - from) * easeOutCubic(p));
+      el.innerHTML = isPrice
+        ? v.toLocaleString('ru-RU') + ' <span class="curr">₽</span>'
+        : v + ' <small>м²</small>';
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  slider.addEventListener('input', () => {
+    const val = parseInt(slider.value);
+    const total = val * PRICE;
+    const fill = ((val - 10) / (500 - 10)) * 100;
+    slider.style.setProperty('--fill', fill + '%');
+    animateNum(curArea, val, areaLabel, false);
+    animateNum(curTotal, total, totalPrice, true);
+    curArea = val; curTotal = total;
+  });
+
+  (() => {
+    const fill = ((50 - 10) / (500 - 10)) * 100;
+    slider.style.setProperty('--fill', fill + '%');
+  })();
+
+  function getSubs() { try { return JSON.parse(localStorage.getItem('profivdele_submissions')) || []; } catch { return []; } }
+
+  submitBtn.addEventListener('click', () => {
+    const area = parseInt(slider.value);
+    const want = clientWant.value.trim() || 'Не указано';
+    const name = clientName.value.trim() || 'Не указано';
+    const phone = clientPhone.value.trim() || 'Не указан';
+    if (area < 1) return;
+    const payload = { want, name, phone, area, total: area * PRICE, date: new Date().toISOString() };
+    const subs = getSubs();
+    subs.push(payload);
+    localStorage.setItem('profivdele_submissions', JSON.stringify(subs));
+    console.log('📦 JSON для CRM:', JSON.stringify(payload, null, 2));
+
+    calcForm.querySelector('.calc-total-hero').style.display = 'none';
+    calcForm.querySelector('.slider-wrap').style.display = 'none';
+    document.querySelectorAll('.calc-field').forEach(el => el.style.display = 'none');
+    submitBtn.style.display = 'none';
+    calcSuccess.classList.add('show');
+  });
+
+  // ───── SWIPER PORTFOLIO ─────
+  const swiper = new Swiper('#portfolioSwiper', {
+    grabCursor: true,
+    slidesPerView: 3,
+    centeredSlides: false,
+    slidesPerGroup: 3,
+    spaceBetween: 24,
+    speed: 500,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-portfolio-wrap .swiper-button-next',
+      prevEl: '.swiper-portfolio-wrap .swiper-button-prev',
+    },
+    breakpoints: {
+      320: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 12 },
+      600: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 16 },
+      992: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 24 },
+    },
+  });
+
+  // ───── FOOTER AMBIENT GLOW ─────
+  const footer = document.getElementById('footer');
+  const glow = document.getElementById('footerGlow');
+
+  footer.addEventListener('mousemove', (e) => {
+    const r = footer.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    glow.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+    glow.style.opacity = '1';
+  });
+
+  footer.addEventListener('mouseleave', () => {
+    glow.style.opacity = '0';
+  });
+
+  // ───── GSAP SCROLL ANIMATIONS (enhancement) ─────
+  gsap.utils.toArray('.service-card').forEach((el) => {
+    gsap.fromTo(el,
+      { y: 40, opacity: 0 },
+      {
+        y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      }
+    );
+  });
+
+  gsap.utils.toArray('.section-label, .section-title, .section-desc').forEach((el) => {
+    gsap.fromTo(el,
+      { y: 30, opacity: 0 },
+      {
+        y: 0, opacity: 1, duration: 0.6, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      }
+    );
+  });
+</script>
+
+</body>
+</html>
